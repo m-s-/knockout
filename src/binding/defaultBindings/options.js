@@ -19,6 +19,12 @@ ko.bindingHandlers['options'] = {
         var selectWasPreviouslyEmpty = element.length == 0;
         var previousScrollTop = (!selectWasPreviouslyEmpty && element.multiple) ? element.scrollTop : null;
 
+		// Support for function in options binding handler
+		// If the valueAccessor is a function but not an observable, invoke it
+		if (typeof valueAccessor() === "function" && !ko.isObservable(valueAccessor())) {
+            valueAccessor = valueAccessor();
+        }
+		
         var unwrappedArray = ko.utils.unwrapObservable(valueAccessor());
         var includeDestroyed = allBindings.get('optionsIncludeDestroyed');
         var arrayToDomNodeChildrenOptions = {};
